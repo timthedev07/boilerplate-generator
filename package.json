@@ -1,8 +1,9 @@
 {
   "name": "@dev07/boilerplate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "license": "MIT",
+  "bin": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts"
