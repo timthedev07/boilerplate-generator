@@ -1,6 +1,6 @@
 # Get Started
 
 ```bash
-npm i -g @dev07/boilerplate-generator
+npm i -g @dev07/boilerplate
 boilerplate
 ```
