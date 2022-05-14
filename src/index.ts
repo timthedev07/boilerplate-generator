@@ -15,16 +15,25 @@ export const getRepoUrl = (name: string) => {
   return `https://github.com/timthedev07/${name}`;
 };
 
+const updatePackageJson = (projectName: string) => {
+  const filePath = `${projectName}/package.json`;
+  const packageJson = JSON.parse(readFileSync(filePath).toString());
+  packageJson.name = projectName;
+  writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
+  yarnInstallIn(projectName);
+};
+
 const BOILERPLATES = {
   "Next.js with TailwindCSS": "next-tailwind-ts-boilerplate",
   "Express + Next.js URQL GraphQL Session Auth":
     "nextjs-express-urql-session-auth",
+  "Next.js with NextAuth.js, Tailwindcss, and Prisma": "next-auth-prisma-pgql",
 };
 
 // scripts used to modify stuff like `name` in package.json
 const MODIFICATION_SCRIPTS: Record<
   keyof typeof BOILERPLATES,
-  (projectName: string) => Promise<void>
+  (projectName: string) => Promise<void> | void
 > = {
   "Express + Next.js URQL GraphQL Session Auth": async (projectName) => {
     const apiFilePath = `${projectName}/api/package.json`;
@@ -58,13 +67,8 @@ const MODIFICATION_SCRIPTS: Record<
     yarnInstallIn(projectName + "/api");
     yarnInstallIn("../web");
   },
-  "Next.js with TailwindCSS": async (projectName) => {
-    const filePath = `${projectName}/package.json`;
-    const packageJson = JSON.parse(readFileSync(filePath).toString());
-    packageJson.name = projectName;
-    writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
-    yarnInstallIn(projectName);
-  },
+  "Next.js with TailwindCSS": updatePackageJson,
+  "Next.js with NextAuth.js, Tailwindcss, and Prisma": updatePackageJson,
 };
 
 (async () => {
